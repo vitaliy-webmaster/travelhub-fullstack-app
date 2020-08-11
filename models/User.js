@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: '/static/img/avatar.jpg',
+      default: '/public/images/avatar.jpg',
     },
   },
   { timestamps: true }

@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const path = require('path');
 
 const checkServerStatus = require('./helpers/checkServerStatus');
 const config = require('./config');
@@ -20,6 +21,7 @@ const rootUrl = dev ? `http://localhost:${port}` : config.productionURL;
 
 require('./models/User');
 require('./models/Post');
+const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
 require('./passport');
@@ -30,6 +32,7 @@ const connectMongoDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     });
     console.log('MongoDB connected successfully');
   } catch (error) {
@@ -49,6 +52,8 @@ if (!dev) {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 const sessionConfig = {
   name: 'blog-user-id.sid',
@@ -75,21 +80,25 @@ app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req, res, next) => {
-  res.locals.user = req.user || null;
-  next();
-});
+app.use(logger('dev'));
 
-app.use(logger('tiny'));
-
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/posts', postRouter);
 
+/* redirect 404 to global error handler */
+app.use(function (req, res, next) {
+  const error = new Error('Not Found');
+  error.status = 404;
+  next(error);
+});
+
+/* global error handler */
 app.use((error, req, res, next) => {
   const { status = 500, message } = error;
   res.status(status).json({
-    type: 'error',
     message,
+    error: dev ? error : {},
   });
 });
 
@@ -97,6 +106,6 @@ app.listen(port, (error) => {
   if (error) throw error;
   console.log(`Server successfully started on ${rootUrl}`);
 
-  /* Helper function to avoid node sleeping using free plan on Heroku */
+  /* helper function to avoid node sleeping using free plan on Heroku */
   checkServerStatus(rootUrl, 25);
 });
