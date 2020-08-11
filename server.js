@@ -106,6 +106,6 @@ app.listen(port, (error) => {
   if (error) throw error;
   console.log(`Server successfully started on ${rootUrl}`);
 
-  /* helper function to avoid node sleeping using free plan on Heroku */
+  /* helper function to avoid node sleeping using free tariff plan on Heroku */
   checkServerStatus(rootUrl, 25);
 });

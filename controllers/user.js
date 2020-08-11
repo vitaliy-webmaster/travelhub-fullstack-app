@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const createError = require('../helpers/createError');
+const removeEmptyKeys = require('../helpers/removeEmptyKeys');
 
 const User = mongoose.model('User');
 
@@ -27,12 +28,13 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   const { userId } = req.params;
+  const { birthday, gender, bio, avatar } = req.body;
   if (!userId || req.user._id.toString() !== userId)
     return next(createError('Not authorized', 403));
   try {
     const updUser = await User.findByIdAndUpdate(
       req.user._id,
-      { $set: req.body },
+      { $set: removeEmptyKeys({ birthday, gender, bio, avatar }) },
       { new: true }
     );
     return res.status(200).json(updUser);
