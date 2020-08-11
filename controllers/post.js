@@ -6,8 +6,9 @@ const removeEmptyKeys = require('../helpers/removeEmptyKeys');
 const Post = mongoose.model('Post');
 
 const getAllPosts = async (req, res, next) => {
+  const { skip, limit, sortBy } = req.query;
   try {
-    const posts = await Post.find({});
+    const posts = await Post.paginate({}, { skip, limit, sortBy });
     return res.status(200).json(posts);
   } catch (error) {
     return next(error);
@@ -16,9 +17,13 @@ const getAllPosts = async (req, res, next) => {
 
 const getPostsByTags = async (req, res, next) => {
   const { tags } = req.body;
+  const { skip, limit, sortBy } = req.query;
   try {
     if (tags && tags.length > 0) {
-      const posts = await Post.find({ tags: { $in: tags } });
+      const posts = await Post.paginate(
+        { tags: { $in: tags } },
+        { skip, limit, sortBy }
+      );
       return res.status(200).json(posts);
     } else {
       return next(createError('Invalid input data: tags', 400));
@@ -29,9 +34,13 @@ const getPostsByTags = async (req, res, next) => {
 };
 
 const getAuthUserPosts = async (req, res, next) => {
+  const { skip, limit, sortBy } = req.query;
   if (!req.user._id) return next(createError('Not authenticated', 401));
   try {
-    const posts = await Post.find({ author: req.user._id });
+    const posts = await Post.paginate(
+      { author: req.user._id },
+      { skip, limit, sortBy }
+    );
     return res.status(200).json(posts);
   } catch (error) {
     return next(error);

@@ -28,4 +28,18 @@ const postSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+class PostClass {
+  static async paginate(
+    query = {},
+    { skip, limit, sortBy = 'createdAt' } = {}
+  ) {
+    let chain = this.find(query).sort({ [sortBy]: -1 });
+    if (skip != undefined) chain.skip(parseInt(skip));
+    if (limit != undefined) chain.limit(parseInt(limit));
+    return chain;
+  }
+}
+
+postSchema.loadClass(PostClass);
+
 module.exports = mongoose.model('Post', postSchema);
