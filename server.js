@@ -80,18 +80,21 @@ app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(logger('dev'));
+if (dev) app.use(logger('dev'));
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/posts', postRouter);
 
-/* redirect 404 to global error handler */
-app.use(function (req, res, next) {
-  const error = new Error('Not Found');
-  error.status = 404;
-  next(error);
-});
+if (!dev) {
+  /* serve React client build files */
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  /* handle React client routing */
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
 
 /* global error handler */
 app.use((error, req, res, next) => {
