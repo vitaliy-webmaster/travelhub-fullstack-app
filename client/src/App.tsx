@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import { firstActionCreator } from './redux/actions';
 
-function App() {
-  return <div className="App">TEST TEXT!</div>;
-}
+const App = () => {
+  useEffect(() => {
+    store.dispatch(firstActionCreator({}));
+  }, []);
+
+  return (
+    <Provider store={store}>
+      <div className="App">TEST TEXT!</div>
+    </Provider>
+  );
+};
 
 export default App;
