@@ -1,21 +1,56 @@
-export const FIRST_ACTION_TYPE = 'FIRST_ACTION_TYPE';
-export const SECOND_ACTION_TYPE = 'SECOND_ACTION_TYPE';
+import { User } from '../types';
 
-interface FirstAction {
-  type: typeof FIRST_ACTION_TYPE;
-  payload: object;
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILED = 'LOGOUT_FAILED';
+
+interface LogInSuccess {
+  type: typeof LOGIN_SUCCESS;
+  payload: User;
 }
 
-interface SecondAction {
-  type: typeof SECOND_ACTION_TYPE;
-  payload: object;
+interface LogInFailed {
+  type: typeof LOGIN_FAILED;
+  payload: Error;
 }
 
-export type Action = FirstAction | SecondAction;
+interface LogOutSuccess {
+  type: typeof LOGOUT_SUCCESS;
+  payload: string;
+}
 
-export const firstActionCreator = (payload: object): FirstAction => {
+interface LogOutFailed {
+  type: typeof LOGOUT_FAILED;
+  payload: Error;
+}
+
+export type Action = LogInSuccess | LogInFailed | LogOutSuccess | LogOutFailed;
+
+export const logInSuccess = (payload: User): LogInSuccess => {
   return {
-    type: FIRST_ACTION_TYPE,
+    type: LOGIN_SUCCESS,
+    payload,
+  };
+};
+
+export const logInFailed = (payload: Error): LogInFailed => {
+  return {
+    type: LOGIN_FAILED,
+    payload,
+  };
+};
+
+export const logOutSuccess = (payload: string): LogOutSuccess => {
+  return {
+    type: LOGOUT_SUCCESS,
+    payload,
+  };
+};
+
+export const logOutFailed = (payload: Error): LogOutFailed => {
+  return {
+    type: LOGOUT_FAILED,
     payload,
   };
 };

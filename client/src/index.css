@@ -1,1 +1,60 @@
 @import '~antd/dist/antd.css';
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a:hover,
+a:active,
+a:focus {
+    text-decoration: none;
+}
+
+.app-layout {
+    background: #fff;
+}
+
+.app-content {
+    margin-top: 48px;
+    padding:0 50px;
+    flex: 1 0 auto;
+    display: flex;
+    align-items: stretch;
+}
+
+.ant-form-item {
+    margin-bottom: 10px;
+}
+
+.field-container > .ant-row {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.field-container .ant-form-item-label {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.ant-form-item-label > label {
+    color:  rgba(0,0,0,0.65);
+    font-weight: 600;
+    font-size: 13px;
+}

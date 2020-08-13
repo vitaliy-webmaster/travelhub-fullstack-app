@@ -1,4 +1,4 @@
-import { Action, FIRST_ACTION_TYPE } from '../actions';
+import { Action } from '../actions';
 
 export interface PostsState {
   currentPost: object | null;
@@ -10,9 +10,6 @@ const initialState: PostsState = {
 
 const postsReducer = (state: PostsState = initialState, action: Action) => {
   switch (action.type) {
-    case FIRST_ACTION_TYPE: {
-      return state;
-    }
     default: {
       return state;
     }

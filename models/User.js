@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
-const usernameRegexp = /^[a-zA-Z0-9]+$/;
-const emailRegexp = /^\S+@\S+\.\S+$/;
+const usernameRegex = /^[0-9a-zA-Z]{3,}$/;
+const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new mongoose.Schema(
   {
@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       unique: true,
-      match: [usernameRegexp, 'is invalid username'],
+      match: [usernameRegex, 'is invalid username'],
       minlength: 3,
       maxlength: 10,
       required: 'Username is required',
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       unique: true,
-      match: [emailRegexp, 'is invalid email'],
+      match: [emailRegex, 'is invalid email'],
       required: 'Email is required',
       index: true,
     },
@@ -40,7 +40,8 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: '/public/images/avatar.jpg',
+      trim: true,
+      // default: '/server/img/avatar.jpg',
     },
   },
   { timestamps: true }

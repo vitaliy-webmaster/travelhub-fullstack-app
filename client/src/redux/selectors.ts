@@ -1,3 +1,3 @@
 import { AppState } from './reducers';
 
-export const firstSelector = (state: AppState) => state.users;
+export const authUserSelector = (state: AppState) => state.users.authUser;

@@ -1,0 +1,17 @@
+.app-header {
+    height: 48px;
+    line-height: 48px;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.app-header__menu {
+    height: 48px;
+}
+
+.app-header__button {
+    margin-left: 10px;
+}
