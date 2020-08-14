@@ -3,3 +3,22 @@
     margin: 0 5px;
     margin-bottom: 25px;
 }
+
+.ant-card-meta-title {
+    font-size: 14px;
+}
+
+.ant-card-meta-detail > div:not(:last-child) {
+    margin-bottom: 0;
+}
+
+.ant-card-meta-description {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.post-card__text {
+    margin: 25px 0 0;
+    padding: 10px 0;
+    border-top: 1px solid #f0f0f0;
+}

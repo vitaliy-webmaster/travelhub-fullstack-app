@@ -11,6 +11,8 @@ import {
   getAllPostsSuccess,
   getCurrentPostFailed,
   getCurrentPostSuccess,
+  getUserPostsFailed,
+  getUserPostsSuccess,
   likePostFailed,
   likePostSuccess,
   unlikePostFailed,
@@ -50,6 +52,17 @@ export const getAllPostsStart: AppThunk = (pagination: PaginationData) => {
       return dispatch(getAllPostsSuccess(total, posts, pagination));
     } catch (error) {
       return dispatch(getAllPostsFailed(error));
+    }
+  };
+};
+
+export const getUserPostsStart: AppThunk = (pagination: PaginationData) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const { total, posts } = await API.posts.getUserPosts(pagination);
+      return dispatch(getUserPostsSuccess(total, posts, pagination));
+    } catch (error) {
+      return dispatch(getUserPostsFailed(error));
     }
   };
 };

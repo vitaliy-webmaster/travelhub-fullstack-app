@@ -21,6 +21,9 @@ interface APIData {
     getAllPosts: (
       pagination: PaginationData
     ) => Promise<{ total: number; posts: Post[] }>;
+    getUserPosts: (
+      pagination: PaginationData
+    ) => Promise<{ total: number; posts: Post[] }>;
     likePost: (id: string) => Promise<Post>;
     unlikePost: (id: string) => Promise<Post>;
     deletePost: (id: string) => Promise<string>;
@@ -104,6 +107,15 @@ const API: APIData = {
         return await response.json();
       } else {
         throw new Error('Error while fetching posts');
+      }
+    },
+    getUserPosts: async (pagination) => {
+      const query = queryString.stringify(removeEmptyKeys(pagination));
+      const response = await fetch(`/api/v1/posts/my-posts?${query}`);
+      if (response.ok) {
+        return await response.json();
+      } else {
+        throw new Error('Error while fetching user posts');
       }
     },
     likePost: async (id) => {

@@ -11,6 +11,8 @@ export const REFETCH_AUTH_SUCCESS = 'REFETCH_AUTH_SUCCESS';
 export const REFETCH_AUTH_FAILED = 'REFETCH_AUTH_FAILED';
 export const GET_ALL_POSTS_SUCCESS = 'GET_ALL_POSTS_SUCCESS';
 export const GET_ALL_POSTS_FAILED = 'GET_ALL_POSTS_FAILED';
+export const GET_USER_POSTS_SUCCESS = 'GET_USER_POSTS_SUCCESS';
+export const GET_USER_POSTS_FAILED = 'GET_USER_POSTS_FAILED';
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
 export const LIKE_POST_FAILED = 'LIKE_POST_FAILED';
 export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
@@ -74,6 +76,16 @@ interface GetAllPostsSuccess {
 
 interface GetAllPostsFailed {
   type: typeof GET_ALL_POSTS_FAILED;
+  payload: Error;
+}
+
+interface GetUserPostsSuccess {
+  type: typeof GET_USER_POSTS_SUCCESS;
+  payload: { total: number; posts: Post[]; pagination: PaginationData };
+}
+
+interface GetUserPostsFailed {
+  type: typeof GET_USER_POSTS_FAILED;
   payload: Error;
 }
 
@@ -162,6 +174,8 @@ export type Action =
   | RefetchAuthFailed
   | GetAllPostsSuccess
   | GetAllPostsFailed
+  | GetUserPostsSuccess
+  | GetUserPostsFailed
   | LikePostSuccess
   | LikePostFailed
   | UnlikePostSuccess
@@ -248,6 +262,24 @@ export const getAllPostsSuccess = (
 export const getAllPostsFailed = (payload: Error): GetAllPostsFailed => {
   return {
     type: GET_ALL_POSTS_FAILED,
+    payload,
+  };
+};
+
+export const getUserPostsSuccess = (
+  total: number,
+  posts: Post[],
+  pagination: PaginationData
+): GetUserPostsSuccess => {
+  return {
+    type: GET_USER_POSTS_SUCCESS,
+    payload: { total, posts, pagination },
+  };
+};
+
+export const getUserPostsFailed = (payload: Error): GetUserPostsFailed => {
+  return {
+    type: GET_USER_POSTS_FAILED,
     payload,
   };
 };

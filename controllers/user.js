@@ -10,7 +10,7 @@ const getAllUsers = async (req, res) => {
   return res.status(200).json(allUsers);
 };
 
-const getAuthUser = async (req, res) => {
+const getAuthUser = async (req, res, next) => {
   if (!req.user._id) return next(createError('Not authenticated', 401));
   return res.status(200).json(req.user);
 };
@@ -55,4 +55,10 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllUsers, getAuthUser, getUser, updateUser, deleteUser };
+module.exports = {
+  getAllUsers,
+  getAuthUser,
+  getUser,
+  updateUser,
+  deleteUser,
+};

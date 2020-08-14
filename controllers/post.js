@@ -12,7 +12,7 @@ const getAllPosts = async (req, res, next) => {
       {},
       { skip, limit, sortBy, populate: 'likedBy author' }
     );
-    const total = await Post.estimatedDocumentCount({});
+    const total = await Post.countDocuments({});
     return res.status(200).json({ total, posts });
   } catch (error) {
     return next(error);
@@ -28,7 +28,7 @@ const getPostsByTags = async (req, res, next) => {
         { tags: { $in: tags } },
         { skip, limit, sortBy, populate: 'likedBy author' }
       );
-      const total = await Post.estimatedDocumentCount({ tags: { $in: tags } });
+      const total = await Post.countDocuments({ tags: { $in: tags } });
       return res.status(200).json({ total, posts });
     } else {
       return next(createError('Invalid input data: tags', 400));
@@ -46,7 +46,7 @@ const getAuthUserPosts = async (req, res, next) => {
       { author: req.user._id },
       { skip, limit, sortBy, populate: 'likedBy author' }
     );
-    const total = await Post.estimatedDocumentCount({ author: req.user._id });
+    const total = await Post.countDocuments({ author: req.user._id });
     return res.status(200).json({ total, posts });
   } catch (error) {
     return next(error);

@@ -3,7 +3,6 @@ import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 
 import './style.css';
-import { User } from '../../types';
 import InnerForm from './InnerForm';
 import { createPostStart } from '../../redux/thunks';
 

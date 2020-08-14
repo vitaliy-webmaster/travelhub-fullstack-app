@@ -9,6 +9,8 @@ import {
   GET_ALL_POSTS_SUCCESS,
   GET_CURRENT_POST_FAILED,
   GET_CURRENT_POST_SUCCESS,
+  GET_USER_POSTS_FAILED,
+  GET_USER_POSTS_SUCCESS,
   LIKE_POST_FAILED,
   LIKE_POST_SUCCESS,
   UNLIKE_POST_FAILED,
@@ -24,6 +26,9 @@ export interface PostsState {
   posts: Post[] | null;
   postsTotal: number | null;
   postsPagination: PaginationData | null;
+  // userPosts: Post[] | null;
+  // userPostsTotal: number | null;
+  // userPostsPagination: PaginationData | null;
   postsError: Error | null;
 }
 
@@ -32,6 +37,9 @@ const initialState: PostsState = {
   posts: null,
   postsTotal: null,
   postsPagination: null,
+  // userPosts: null,
+  // userPostsTotal: null,
+  // userPostsPagination: null,
   postsError: null,
 };
 
@@ -47,6 +55,21 @@ const postsReducer = (state: PostsState = initialState, action: Action) => {
       };
     }
     case GET_ALL_POSTS_FAILED: {
+      return {
+        ...state,
+        postsError: action.payload,
+      };
+    }
+    case GET_USER_POSTS_SUCCESS: {
+      const { posts, total, pagination } = action.payload;
+      return {
+        ...state,
+        posts,
+        postsTotal: total,
+        postsPagination: pagination,
+      };
+    }
+    case GET_USER_POSTS_FAILED: {
       return {
         ...state,
         postsError: action.payload,

@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import moment from 'moment';
 import { Card, Avatar, Tooltip } from 'antd';
 import {
   EditOutlined,
@@ -42,7 +43,7 @@ const PostCard = ({
     createdAt,
   } = post;
 
-  const { avatar = '/server/img/no-author-avatar.png' } = author;
+  const { username, avatar = '/server/img/no-author-avatar.png' } = author;
 
   const like = useCallback(() => {
     likePost(postId);
@@ -88,13 +89,19 @@ const PostCard = ({
 
   return (
     <Card
+      title={title}
       className="post-card"
       cover={
         <img alt="Post Image Preview" src={'/server/img/no-post-preview.png'} />
       }
       actions={actions}
     >
-      <Meta avatar={<Avatar src={avatar} />} title={title} description={text} />
+      <Meta
+        avatar={<Avatar src={avatar} />}
+        title={`Author: ${username}`}
+        description={`Created: ${moment(createdAt).format('DD-MM-YYYY')}`}
+      />
+      <div className="post-card__text">{text}</div>
     </Card>
   );
 };
