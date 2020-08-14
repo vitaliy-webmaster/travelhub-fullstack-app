@@ -2,12 +2,12 @@ export interface User {
   _id: string;
   username: string;
   email: string;
-  birthday?: Date;
+  birthday?: string;
   gender?: string;
   bio?: string;
   avatar?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Post {
@@ -15,9 +15,9 @@ export interface Post {
   title: string;
   text: string;
   image?: string;
-  author: string;
-  likedBy: Array<string | User>;
-  tags: Array<string>;
-  createdAt?: Date;
-  updatedAt?: Date;
+  author: User;
+  likedBy: User[];
+  tags: string[];
+  createdAt?: string;
+  updatedAt?: string;
 }

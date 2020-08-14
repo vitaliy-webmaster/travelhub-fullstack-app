@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import './style.css';
 import LogInForm from '../../components/LogInForm';
+import { User } from '../../types';
+import { Button } from 'antd';
 
-const Starter = () => {
+interface Props {
+  authUser: User | null;
+}
+
+const Starter = ({ authUser }: Props) => {
+  const history = useHistory();
+
+  const navigate = useCallback(
+    (url: string) => () => {
+      history.push(url);
+    },
+    [history]
+  );
+
   return (
     <div className="page-starter">
       <div className="page-starter__greeting greeting">
@@ -14,9 +30,25 @@ const Starter = () => {
           new adventures, and build your audience everywhere you want.
         </p>
       </div>
-      <div className="page-starter__login login-container">
-        <LogInForm />
-      </div>
+      {authUser ? (
+        <div className="page-starter__get-access-container get-access-container">
+          <div className="get-access-container__header">
+            Already logged in. <br /> Get access now?
+          </div>
+          <Button
+            className="app-header__button"
+            onClick={navigate('/feed')}
+            size="middle"
+            type="primary"
+          >
+            Proceed
+          </Button>
+        </div>
+      ) : (
+        <div className="page-starter__login-container login-container">
+          <LogInForm />
+        </div>
+      )}
     </div>
   );
 };

@@ -10,13 +10,15 @@ import { logOutStart } from '../../../redux/thunks';
 
 interface Props {
   authUser: User;
+  navigate: Function;
 }
 
 const Profile = ({ authUser }: Props) => {
   const { _id, username, avatar = '' } = authUser;
   const dispatch = useDispatch();
 
-  const logOut = () => {
+  const logOut = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.preventDefault();
     dispatch(logOutStart());
   };
 
@@ -28,8 +30,8 @@ const Profile = ({ authUser }: Props) => {
           Hello, <span className="header-profile__username">{username}</span>
         </div>
         <div>
-          <Link to={`/user/${_id}`}>Profile</Link>
-          <Link to={`/user/${_id}`}>Posts</Link>
+          <Link to={`/post/new`}>New</Link>
+          <Link to={`/me`}>Profile</Link>
           <a href="#" onClick={logOut}>
             Logout
           </a>

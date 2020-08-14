@@ -20,16 +20,13 @@ const LogInForm = () => {
   const dispatch = useDispatch();
 
   const handleSubmit = ({ email, password }: LogInFormValues) => {
-    console.log(`${email}, ${password}`);
     dispatch(logInStart({ email, password }));
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      render={InnerForm}
-    />
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      {InnerForm}
+    </Formik>
   );
 };
 

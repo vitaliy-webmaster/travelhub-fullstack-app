@@ -1,45 +1,44 @@
 import moment from 'moment';
 
-const usernameRegexp = /^[0-9a-zA-Z]{3,}$/;
+const usernameRegex = /^[0-9a-zA-Z]{3,}$/;
 const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{6,20}$/;
 
-export const validateDate = (value: any) => {
-  let errors;
-
-  if (!value) {
-    errors = 'Date is required';
-  } else if (
-    moment(value).format('DD-MM-YYYY') < moment(Date.now()).format('DD-MM-YYYY')
-  ) {
-    errors = 'Invalid date';
-  }
-
-  return errors;
+export const validateUsername = (value: any) => {
+  if (!value) return 'Username is required';
+  if (!usernameRegex.test(value)) return 'Invalid username';
 };
 
 export const validateEmail = (value: any) => {
-  let errors;
-
-  if (!value) {
-    errors = 'Email is required';
-  } else if (!emailRegex.test(value)) {
-    errors = 'Invalid email';
-  }
-
-  return errors;
+  if (!value) return 'Email is required';
+  if (!emailRegex.test(value)) return 'Invalid email';
 };
 
 export const validatePassword = (value: string) => {
-  let errors;
+  if (!value) return 'Password is required';
+  if (!passwordRegex.test(value)) return 'Invalid password';
+};
 
-  if (!value) {
-    errors = 'Password is required';
-  } else if (!passwordRegex.test(value)) {
-    errors = 'Invalid password';
+export const validateDate = (value: any) => {
+  if (!value) return;
+  if (moment(value) > moment().subtract(18, 'years')) {
+    return 'You must be at least 18 years old';
   }
+};
 
-  return errors;
+export const validateBio = (value: any) => {
+  if (!value) return;
+  if (value.length > 100) return 'Max 100 symbols allowed';
+};
+
+export const validatePostTitle = (value: any) => {
+  if (!value) return;
+  if (value.length > 100) return 'Max 100 symbols allowed';
+};
+
+export const validatePostText = (value: any) => {
+  if (!value) return;
+  if (value.length > 5000) return 'Max 5000 symbols allowed';
 };
 
 export const isRequired = (value: any) => (!value ? 'Field is required' : '');

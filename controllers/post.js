@@ -8,8 +8,12 @@ const Post = mongoose.model('Post');
 const getAllPosts = async (req, res, next) => {
   const { skip, limit, sortBy } = req.query;
   try {
-    const posts = await Post.paginate({}, { skip, limit, sortBy });
-    return res.status(200).json(posts);
+    const posts = await Post.paginate(
+      {},
+      { skip, limit, sortBy, populate: 'likedBy author' }
+    );
+    const total = await Post.estimatedDocumentCount({});
+    return res.status(200).json({ total, posts });
   } catch (error) {
     return next(error);
   }
@@ -22,9 +26,10 @@ const getPostsByTags = async (req, res, next) => {
     if (tags && tags.length > 0) {
       const posts = await Post.paginate(
         { tags: { $in: tags } },
-        { skip, limit, sortBy }
+        { skip, limit, sortBy, populate: 'likedBy author' }
       );
-      return res.status(200).json(posts);
+      const total = await Post.estimatedDocumentCount({ tags: { $in: tags } });
+      return res.status(200).json({ total, posts });
     } else {
       return next(createError('Invalid input data: tags', 400));
     }
@@ -39,9 +44,10 @@ const getAuthUserPosts = async (req, res, next) => {
   try {
     const posts = await Post.paginate(
       { author: req.user._id },
-      { skip, limit, sortBy }
+      { skip, limit, sortBy, populate: 'likedBy author' }
     );
-    return res.status(200).json(posts);
+    const total = await Post.estimatedDocumentCount({ author: req.user._id });
+    return res.status(200).json({ total, posts });
   } catch (error) {
     return next(error);
   }
@@ -50,7 +56,7 @@ const getAuthUserPosts = async (req, res, next) => {
 const getPost = async (req, res, next) => {
   const { postId } = req.params;
   try {
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate('likedBy author');
     if (!post) return next(createError('Post not found', 404));
     return res.status(200).json(post);
   } catch (error) {
@@ -81,7 +87,7 @@ const updatePost = async (req, res, next) => {
       postId,
       { $set: removeEmptyKeys({ title, text, image, tags }) },
       { new: true }
-    );
+    ).populate('likedBy author');
     return res.status(200).json(updPost);
   } catch (error) {
     return next(error);
@@ -116,6 +122,7 @@ const likePost = async (req, res, next) => {
       post.likedBy.push(req.user._id);
       await post.save();
     }
+    await Post.populate(post, { path: 'likedBy author' });
     return res.status(200).json(post);
   } catch (error) {
     return next(error);
@@ -136,6 +143,7 @@ const unlikePost = async (req, res, next) => {
       post.likedBy.pull(req.user._id.toString());
       await post.save();
     }
+    await Post.populate(post, { path: 'likedBy author' });
     return res.status(200).json(post);
   } catch (error) {
     return next(error);

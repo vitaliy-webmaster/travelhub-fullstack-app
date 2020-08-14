@@ -17,6 +17,7 @@
     "antd": "^4.5.3",
     "formik": "^2.1.5",
     "moment": "^2.27.0",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",

@@ -31,7 +31,7 @@
 
 .header-profile__greeting div:last-child {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     font-size: 11px;
     line-height: 16px;
 }

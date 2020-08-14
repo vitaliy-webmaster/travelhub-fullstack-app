@@ -14,7 +14,7 @@ export default ({
       component={AntInput}
       name="email"
       type="email"
-      label="Email"
+      label="Email*"
       validate={validateEmail}
       submitCount={submitCount}
       hasFeedback
@@ -23,7 +23,7 @@ export default ({
       component={AntInputPassword}
       name="password"
       type="password"
-      label="Password"
+      label="Password*"
       validate={validatePassword}
       submitCount={submitCount}
       hasFeedback

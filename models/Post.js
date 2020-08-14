@@ -31,9 +31,10 @@ const postSchema = new mongoose.Schema(
 class PostClass {
   static async paginate(
     query = {},
-    { skip, limit, sortBy = 'createdAt' } = {}
+    { skip, limit, sortBy = 'createdAt', populate } = {}
   ) {
     let chain = this.find(query).sort({ [sortBy]: -1 });
+    if (populate != undefined) chain.populate(populate);
     if (skip != undefined) chain.skip(parseInt(skip));
     if (limit != undefined) chain.limit(parseInt(limit));
     return chain;
