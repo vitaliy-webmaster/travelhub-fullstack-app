@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Layout, Spin } from 'antd';
+import { Layout } from 'antd';
 
 import Header from './components/Header';
 import Footer from './components/Footer';

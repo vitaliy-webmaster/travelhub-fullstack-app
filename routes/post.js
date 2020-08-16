@@ -14,6 +14,12 @@ router.get(
 );
 router.get('/:postId', postController.getPost);
 router.post('/', authController.isAuthenticated, postController.addPost);
+router.post(
+  '/upload-post-preview',
+  authController.isAuthenticated,
+  postController.multerPostPreview,
+  postController.uploadPostPreview
+);
 router.patch(
   '/:postId',
   authController.isAuthenticated,

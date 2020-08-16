@@ -14,7 +14,7 @@ interface Props {
 }
 
 const Profile = ({ authUser }: Props) => {
-  const { _id, username, avatar = '' } = authUser;
+  const { username, avatar = '/server/images/avatar-default.jpg' } = authUser;
   const dispatch = useDispatch();
 
   const logOut = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -32,7 +32,7 @@ const Profile = ({ authUser }: Props) => {
         <div>
           <Link to={`/post/new`}>New</Link>
           <Link to={`/me`}>Profile</Link>
-          <a href="#" onClick={logOut}>
+          <a href="about:blank" onClick={logOut}>
             Logout
           </a>
         </div>

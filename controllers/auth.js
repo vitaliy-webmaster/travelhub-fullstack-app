@@ -2,15 +2,31 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const createError = require('../helpers/createError');
+const removeEmptyKeys = require('../helpers/removeEmptyKeys');
 
 const User = mongoose.model('User');
 
-const signUp = (req, res, next) => {
-  const { username, email, password } = req.body;
-  const user = new User({ username, email });
-  User.register(user, password, (error, user) => {
+const signUp = async (req, res, next) => {
+  const { username, email, password, birthday, gender, bio, avatar } = req.body;
+  const oldUserByUsername = await User.findOne({ username: username.trim() });
+  if (oldUserByUsername) return next(createError('Username already exists'));
+  const oldUserByEmail = await User.findOne({ email: email.trim() });
+  if (oldUserByEmail) return next(createError('Email already exists'));
+  const newUser = new User(
+    removeEmptyKeys({ username, email, birthday, gender, bio, avatar })
+  );
+  User.register(newUser, password, (error, user) => {
     if (error) return next(error);
-    return res.status(201).json(user);
+    passport.authenticate('local', (error, user, info) => {
+      if (error) return next(error);
+      if (!user) {
+        return next(createError('Server Error', 500));
+      }
+      req.logIn(user, (error) => {
+        if (error) return next(error);
+        return res.status(201).json(user);
+      });
+    })(req, res, next);
   });
 };
 

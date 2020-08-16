@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 
 import { Form, Field, FormikProps } from 'formik';
 import {
@@ -13,6 +12,7 @@ import {
   validateBio,
   validateDate,
   validateEmail,
+  validateGender,
   validatePassword,
   validateUsername,
 } from '../../helpers/validateFields';
@@ -31,7 +31,7 @@ export default ({
       label="Username*"
       validate={validateUsername}
       submitCount={submitCount}
-      hasFeedback
+      // hasFeedback
     />
     <Field
       component={AntInput}
@@ -40,7 +40,7 @@ export default ({
       label="Email*"
       validate={validateEmail}
       submitCount={submitCount}
-      hasFeedback
+      // hasFeedback
     />
     <Field
       component={AntInputPassword}
@@ -49,7 +49,7 @@ export default ({
       label="Password*"
       validate={validatePassword}
       submitCount={submitCount}
-      hasFeedback
+      // hasFeedback
     />
     <Field
       component={AntDatePicker}
@@ -59,7 +59,7 @@ export default ({
       format="DD-MM-YYYY"
       validate={validateDate}
       submitCount={submitCount}
-      hasFeedback
+      // hasFeedback
     />
     <Field
       component={AntSelect}
@@ -68,7 +68,8 @@ export default ({
       selectOptions={['male', 'female']}
       submitCount={submitCount}
       tokenSeparators={[',']}
-      hasFeedback
+      validate={validateGender}
+      // hasFeedback
     />
     <Field
       component={AntTextArea}
@@ -78,7 +79,7 @@ export default ({
       rows={4}
       validate={validateBio}
       submitCount={submitCount}
-      hasFeedback
+      // hasFeedback
     />
     <div className="signup-submit-container">
       <button className="ant-btn ant-btn-primary" type="submit">

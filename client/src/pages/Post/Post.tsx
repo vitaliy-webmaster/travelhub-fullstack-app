@@ -20,7 +20,7 @@ const Post = () => {
 
   useEffect(() => {
     dispatch(getCurrentPostStart(postId));
-  }, [dispatch]);
+  }, [dispatch, postId]);
 
   return (
     <div className="page-post">

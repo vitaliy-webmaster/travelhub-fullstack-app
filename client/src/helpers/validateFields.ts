@@ -26,18 +26,22 @@ export const validateDate = (value: any) => {
   }
 };
 
+export const validateGender = (value: any) => {
+  if (!['male', 'female'].includes(value)) return 'Gender is required';
+};
+
 export const validateBio = (value: any) => {
   if (!value) return;
   if (value.length > 100) return 'Max 100 symbols allowed';
 };
 
 export const validatePostTitle = (value: any) => {
-  if (!value) return;
+  if (!value) return 'Title is required';
   if (value.length > 100) return 'Max 100 symbols allowed';
 };
 
 export const validatePostText = (value: any) => {
-  if (!value) return;
+  if (!value) return 'Text is required';
   if (value.length > 5000) return 'Max 5000 symbols allowed';
 };
 

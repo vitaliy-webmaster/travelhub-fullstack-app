@@ -59,18 +59,23 @@ const API: APIData = {
       }
     },
     signUp: async (values) => {
-      const response = await fetch(`/api/v1/auth/signup`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-      if (response.ok) {
-        return await response.json();
-      } else {
-        throw new Error('Invalid Signup Attempt');
+      try {
+        const response = await fetch(`/api/v1/auth/signup`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          return data;
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        throw error;
       }
     },
     refetchAuth: async () => {
@@ -166,33 +171,43 @@ const API: APIData = {
       }
     },
     updatePost: async ({ id, ...rest }) => {
-      const response = await fetch(`/api/v1/posts/${id}`, {
-        method: 'PATCH',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...rest }),
-      });
-      if (response.ok) {
-        return await response.json();
-      } else {
-        throw new Error('Invalid Post Update Attempt');
+      try {
+        const response = await fetch(`/api/v1/posts/${id}`, {
+          method: 'PATCH',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...rest }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          return data;
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        throw error;
       }
     },
     createPost: async (values) => {
-      const response = await fetch(`/api/v1/posts`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-      if (response.ok) {
-        return await response.json();
-      } else {
-        throw new Error('Invalid Post Create Attempt');
+      try {
+        const response = await fetch(`/api/v1/posts`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          return data;
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        throw error;
       }
     },
   },

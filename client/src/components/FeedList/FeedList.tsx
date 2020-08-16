@@ -12,7 +12,6 @@ import {
   unlikePostStart,
 } from '../../redux/thunks';
 import PostCard from '../PostCard';
-import { type } from 'os';
 
 interface Props {
   posts: Post[];
@@ -38,14 +37,14 @@ const FeedList = ({
     (id: string) => {
       authUser ? dispatch(likePostStart(id)) : history.push('/login');
     },
-    [dispatch, authUser]
+    [dispatch, authUser, history]
   );
 
   const unlikePost = useCallback(
     (id: string) => {
       authUser ? dispatch(unlikePostStart(id)) : history.push('/login');
     },
-    [dispatch, authUser]
+    [dispatch, authUser, history]
   );
 
   const deletePost = useCallback(

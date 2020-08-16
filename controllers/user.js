@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-
-const createError = require('../helpers/createError');
-const removeEmptyKeys = require('../helpers/removeEmptyKeys');
+const multer = require('multer');
 
 const User = mongoose.model('User');
+const createError = require('../helpers/createError');
+const removeEmptyKeys = require('../helpers/removeEmptyKeys');
 
 const getAllUsers = async (req, res) => {
   const allUsers = await User.find({});
@@ -24,6 +24,41 @@ const getUser = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
+};
+
+const multerAvatarConfig = {
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/server/uploads/avatar/');
+    },
+    filename: (req, file, cb) => {
+      const nameData = file.originalname.split('.');
+      const ext = nameData[nameData.length - 1];
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e6);
+      cb(null, file.fieldname + '-' + uniqueSuffix + '.' + ext);
+    },
+  }),
+  limits: {
+    fileSize: 1024 * 1024 * 2,
+  },
+  fileFilter: (req, file, next) => {
+    if (
+      file.mimetype === 'image/jpg' ||
+      file.mimetype === 'image/jpeg' ||
+      file.mimetype === 'image/png'
+    ) {
+      next(null, true);
+    } else {
+      next(null, false);
+    }
+  },
+};
+
+const multerAvatar = multer(multerAvatarConfig).single('avatar');
+
+const uploadAvatar = (req, res, next) => {
+  if (!req.file) return next(createError('Image type not supported', 400));
+  return res.status(200).json({ filename: req.file.filename });
 };
 
 const updateUser = async (req, res, next) => {
@@ -59,6 +94,8 @@ module.exports = {
   getAllUsers,
   getAuthUser,
   getUser,
+  multerAvatar,
+  uploadAvatar,
   updateUser,
   deleteUser,
 };

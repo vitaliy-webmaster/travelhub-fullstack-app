@@ -8,6 +8,11 @@ const router = express.Router();
 router.get('/', userController.getAllUsers);
 router.get('/me', authController.isAuthenticated, userController.getAuthUser);
 router.get('/:userId', userController.getUser);
+router.post(
+  '/upload-avatar',
+  userController.multerAvatar,
+  userController.uploadAvatar
+);
 router.patch(
   '/:userId',
   authController.isAuthenticated,

@@ -19,10 +19,10 @@ import {
   unlikePostSuccess,
   updatePostFailed,
   updatePostSuccess,
-  updateUserFailed,
-  updateUserSuccess,
 } from '../actions';
-import { UpdateUserStartData } from './users';
+import openNotification, {
+  NotificationType,
+} from '../../helpers/openNotification';
 
 export interface PaginationData {
   skip?: number;
@@ -112,24 +112,62 @@ export const getCurrentPostStart: AppThunk = (id: string) => {
   };
 };
 
-export const updatePostStart: AppThunk = (values: UpdatePostStartData) => {
-  return async (dispatch: Dispatch) => {
-    try {
-      const post = await API.posts.updatePost(values);
-      return dispatch(updatePostSuccess(post));
-    } catch (error) {
-      return dispatch(updatePostFailed(error));
-    }
+export const updatePostStart: AppThunk<Promise<void>> = (
+  values: UpdatePostStartData
+) => {
+  return (dispatch, getState) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const {
+          users: { authUser },
+        } = getState();
+        const post = await API.posts.updatePost(values);
+        dispatch(updatePostSuccess(post));
+        openNotification(
+          NotificationType.SUCCESS,
+          `${authUser?.username}, congratulations!`,
+          'Your post is successfully updated'
+        );
+        return resolve();
+      } catch (error) {
+        dispatch(updatePostFailed(error));
+        openNotification(
+          NotificationType.ERROR,
+          'Post Update Failure',
+          `${error.message}`
+        );
+        return reject();
+      }
+    });
   };
 };
 
-export const createPostStart: AppThunk = (values: CreatePostStartData) => {
-  return async (dispatch: Dispatch) => {
-    try {
-      const post = await API.posts.createPost(values);
-      return dispatch(createPostSuccess(post));
-    } catch (error) {
-      return dispatch(createPostFailed(error));
-    }
+export const createPostStart: AppThunk<Promise<void>> = (
+  values: CreatePostStartData
+) => {
+  return (dispatch, getState) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const {
+          users: { authUser },
+        } = getState();
+        const post = await API.posts.createPost(values);
+        dispatch(createPostSuccess(post));
+        openNotification(
+          NotificationType.SUCCESS,
+          `${authUser?.username}, congratulations!`,
+          'Your post is successfully created'
+        );
+        return resolve();
+      } catch (error) {
+        dispatch(createPostFailed(error));
+        openNotification(
+          NotificationType.ERROR,
+          'Oh no, Failure',
+          `${error.message}`
+        );
+        return reject();
+      }
+    });
   };
 };

@@ -22,3 +22,10 @@
     padding: 10px 0;
     border-top: 1px solid #f0f0f0;
 }
+
+.post-card__tags {
+    border-top: 1px solid #f0f0f0;
+    padding: 10px 0 0;
+    font-size: 12px;
+    font-weight: 600;
+}

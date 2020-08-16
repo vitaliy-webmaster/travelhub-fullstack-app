@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Layout, Menu } from 'antd';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';

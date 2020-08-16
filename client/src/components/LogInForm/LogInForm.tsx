@@ -1,10 +1,14 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Formik } from 'formik';
 
 import './style.css';
 import InnerForm from './InnerForm';
 import { useDispatch } from 'react-redux';
 import { logInStart } from '../../redux/thunks';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppState } from '../../redux/reducers';
+import { Action } from 'redux';
+import { useHistory } from 'react-router';
 
 export interface LogInFormValues {
   email: string;
@@ -17,10 +21,13 @@ const initialValues: LogInFormValues = {
 };
 
 const LogInForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
+  const history = useHistory();
 
   const handleSubmit = ({ email, password }: LogInFormValues) => {
-    dispatch(logInStart({ email, password }));
+    dispatch(logInStart({ email, password }))
+      .then(() => history.push('/feed'))
+      .catch();
   };
 
   return (

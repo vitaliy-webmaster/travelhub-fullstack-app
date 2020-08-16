@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import moment, { Moment } from 'moment';
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import './style.css';
 import InnerForm from './InnerForm';
 import { User } from '../../types';
 import { updateUserStart } from '../../redux/thunks';
+import UploadAvatarImage from '../UploadAvatarImage';
 
 export interface UserProfileFormValues {
   username: string;
@@ -14,7 +15,6 @@ export interface UserProfileFormValues {
   birthday?: Moment;
   gender?: string;
   bio?: string;
-  avatar?: string;
 }
 
 interface Props {
@@ -23,28 +23,41 @@ interface Props {
 
 const UserProfileForm = ({ authUser }: Props) => {
   const dispatch = useDispatch();
-  const { username, email, birthday, gender, bio, avatar } = authUser;
+  const { username, email, birthday, gender, bio } = authUser;
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (authUser?.avatar) setImageUrl(authUser.avatar);
+  }, [authUser]);
 
   const handleSubmit = (values: UserProfileFormValues) => {
-    const { birthday, gender, bio, avatar } = values;
+    const { birthday, gender, bio } = values;
     dispatch(
-      updateUserStart({ id: authUser._id, birthday, gender, bio, avatar })
+      updateUserStart({
+        id: authUser._id,
+        birthday,
+        gender,
+        bio,
+        avatar: imageUrl,
+      })
     );
   };
 
   const initialValues: UserProfileFormValues = {
     username,
     email,
-    birthday: moment(birthday),
+    birthday: birthday ? moment(birthday) : undefined,
     gender,
     bio,
-    avatar,
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      {InnerForm}
-    </Formik>
+    <div className="user-profile-wrapper">
+      <UploadAvatarImage imageUrl={imageUrl} setImageUrl={setImageUrl} />
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        {InnerForm}
+      </Formik>
+    </div>
   );
 };
 

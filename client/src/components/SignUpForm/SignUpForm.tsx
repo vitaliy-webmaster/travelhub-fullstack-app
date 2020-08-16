@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './style.css';
 import { useDispatch } from 'react-redux';
 import { signUpStart } from '../../redux/thunks';
 import { Formik } from 'formik';
 import InnerForm from './InnerForm';
+import UploadAvatarImage from '../UploadAvatarImage';
 
 export interface SignUpFormValues {
   username: string;
@@ -12,30 +13,35 @@ export interface SignUpFormValues {
   birthday?: Date;
   gender?: string;
   bio?: string;
-  avatar?: string;
 }
 
-const initialValues: SignUpFormValues = {
-  username: 'TestUser',
-  email: 'test12@gmail.com',
-  password: 'Pass1234-',
+const initialValues: Partial<SignUpFormValues> = {
+  username: undefined,
+  email: undefined,
+  password: undefined,
   birthday: undefined,
   gender: undefined,
   bio: undefined,
-  avatar: undefined,
 };
 
 const SignUpForm = () => {
   const dispatch = useDispatch();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const handleSubmit = (values: SignUpFormValues) => {
-    dispatch(signUpStart(values));
+    dispatch(signUpStart({ ...values, avatar: imageUrl }));
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      {InnerForm}
-    </Formik>
+    <div className="signup-form-wrapper">
+      <UploadAvatarImage imageUrl={imageUrl} setImageUrl={setImageUrl} />
+      <Formik
+        initialValues={initialValues as SignUpFormValues}
+        onSubmit={handleSubmit}
+      >
+        {InnerForm}
+      </Formik>
+    </div>
   );
 };
 

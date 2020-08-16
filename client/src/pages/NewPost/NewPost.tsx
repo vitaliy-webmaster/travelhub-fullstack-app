@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import './style.css';
 import { authUserSelector } from '../../redux/selectors';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import LoadSpinner from '../../components/LoadSpinner';
 import NewPostForm from '../../components/NewPostForm';
 
@@ -11,7 +11,6 @@ interface RouteParams {
 }
 
 const NewPost = () => {
-  const dispatch = useDispatch();
   const authUser = useSelector(authUserSelector);
 
   return (

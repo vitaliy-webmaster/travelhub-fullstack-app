@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router';
-import { useSelector } from 'react-redux';
-import { authUserSelector } from '../../redux/selectors';
+import { Redirect, Route, RouteProps } from 'react-router';
 import { User } from '../../types';
 
 interface PrivateRouteProps extends RouteProps {
@@ -14,8 +12,6 @@ interface PrivateRouteProps extends RouteProps {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
   const { authRequired, deniedOnAuth, redirectPath = '/', authUser } = props;
-  console.log('authUser', authUser);
-  console.log('authRequired', authRequired);
   if ((!authUser && authRequired) || (authUser && deniedOnAuth))
     return <Redirect to={{ pathname: redirectPath }} />;
   return (

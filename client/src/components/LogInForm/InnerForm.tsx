@@ -17,7 +17,7 @@ export default ({
       label="Email*"
       validate={validateEmail}
       submitCount={submitCount}
-      hasFeedback
+      // hasFeedback
     />
     <Field
       component={AntInputPassword}
@@ -26,7 +26,7 @@ export default ({
       label="Password*"
       validate={validatePassword}
       submitCount={submitCount}
-      hasFeedback
+      // hasFeedback
     />
     <div className="login-submit-container">
       <button className="ant-btn ant-btn-primary" type="submit">

@@ -2,18 +2,21 @@ import { Dispatch } from 'redux';
 
 import { AppThunk } from './types';
 import {
-  logInSuccess,
   logInFailed,
-  logOutSuccess,
+  logInSuccess,
   logOutFailed,
-  signUpSuccess,
-  signUpFailed,
-  refetchAuthSuccess,
+  logOutSuccess,
   refetchAuthFailed,
-  updateUserSuccess,
+  refetchAuthSuccess,
+  signUpFailed,
+  signUpSuccess,
   updateUserFailed,
+  updateUserSuccess,
 } from '../actions';
 import API from '../../api';
+import openNotification, {
+  NotificationType,
+} from '../../helpers/openNotification';
 
 interface LogInStartData {
   email: string;
@@ -38,24 +41,54 @@ export interface UpdateUserStartData {
   avatar?: string;
 }
 
-export const logInStart: AppThunk = ({ email, password }: LogInStartData) => {
+export const logInStart: AppThunk<Promise<void>> = ({
+  email,
+  password,
+}: LogInStartData) => {
   return async (dispatch: Dispatch) => {
-    try {
-      const user = await API.users.logIn(email, password);
-      return dispatch(logInSuccess(user));
-    } catch (error) {
-      return dispatch(logInFailed(error));
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const user = await API.users.logIn(email, password);
+        dispatch(logInSuccess(user));
+        openNotification(
+          NotificationType.SUCCESS,
+          `Hello, ${user.username}`,
+          `Happy to see you again`
+        );
+        return resolve();
+      } catch (error) {
+        dispatch(logInFailed(error));
+        openNotification(
+          NotificationType.ERROR,
+          'Oh no, Failure',
+          'Email or Password are invalid'
+        );
+        return reject();
+      }
+    });
   };
 };
 
 export const logOutStart: AppThunk = () => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch, getState) => {
     try {
+      const {
+        users: { authUser },
+      } = getState();
       const message = await API.users.logOut();
-      return dispatch(logOutSuccess(message));
+      dispatch(logOutSuccess(message));
+      return openNotification(
+        NotificationType.SUCCESS,
+        `Bye, ${authUser?.username}`,
+        'Waiting to see you again'
+      );
     } catch (error) {
-      return dispatch(logOutFailed(error));
+      dispatch(logOutFailed(error));
+      return openNotification(
+        NotificationType.ERROR,
+        'Oh no, Failure',
+        'Got error, please try again later'
+      );
     }
   };
 };
@@ -64,9 +97,19 @@ export const signUpStart: AppThunk = (values: SignUpStartData) => {
   return async (dispatch: Dispatch) => {
     try {
       const user = await API.users.signUp(values);
-      return dispatch(signUpSuccess(user));
+      dispatch(signUpSuccess(user));
+      return openNotification(
+        NotificationType.SUCCESS,
+        `Congrats, ${user.username}`,
+        'Signed Up successfully'
+      );
     } catch (error) {
-      return dispatch(signUpFailed(error));
+      dispatch(signUpFailed(error));
+      return openNotification(
+        NotificationType.ERROR,
+        'Oh no, Failure',
+        `${error.message}`
+      );
     }
   };
 };
@@ -86,9 +129,19 @@ export const updateUserStart: AppThunk = (values: UpdateUserStartData) => {
   return async (dispatch: Dispatch) => {
     try {
       const user = await API.users.updateUser(values);
-      return dispatch(updateUserSuccess(user));
+      dispatch(updateUserSuccess(user));
+      return openNotification(
+        NotificationType.SUCCESS,
+        `${user.username}, your profile is updated`,
+        'Tell us more about yourself'
+      );
     } catch (error) {
-      return dispatch(updateUserFailed(error));
+      dispatch(updateUserFailed(error));
+      return openNotification(
+        NotificationType.ERROR,
+        'Update Failure',
+        'Please check data and try again later'
+      );
     }
   };
 };

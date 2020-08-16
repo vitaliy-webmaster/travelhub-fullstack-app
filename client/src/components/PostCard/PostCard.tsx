@@ -37,29 +37,29 @@ const PostCard = ({
     title,
     text,
     author,
-    image = '/server/img/no-post-preview.png',
+    image = '/server/images/post-default.jpg',
     likedBy = [],
     tags = [],
     createdAt,
   } = post;
 
-  const { username, avatar = '/server/img/no-author-avatar.png' } = author;
+  const { username, avatar = '/server/images/avatar-default.jpg' } = author;
 
   const like = useCallback(() => {
     likePost(postId);
-  }, [likePost]);
+  }, [likePost, postId]);
 
   const unlike = useCallback(() => {
     unlikePost(postId);
-  }, [unlikePost]);
+  }, [unlikePost, postId]);
 
   const postDelete = useCallback(() => {
     deletePost(postId);
-  }, [deletePost]);
+  }, [deletePost, postId]);
 
   const postEdit = useCallback(() => {
     history.push(`/post/${postId}`);
-  }, [history]);
+  }, [history, postId]);
 
   const actions = [
     <Tooltip key="post-basic-like" title="Like">
@@ -91,9 +91,7 @@ const PostCard = ({
     <Card
       title={title}
       className="post-card"
-      cover={
-        <img alt="Post Image Preview" src={'/server/img/no-post-preview.png'} />
-      }
+      cover={<img alt="" src={image} />}
       actions={actions}
     >
       <Meta
@@ -102,6 +100,7 @@ const PostCard = ({
         description={`Created: ${moment(createdAt).format('DD-MM-YYYY')}`}
       />
       <div className="post-card__text">{text}</div>
+      <div className="post-card__tags">Tags: {tags.join(' ')}</div>
     </Card>
   );
 };
