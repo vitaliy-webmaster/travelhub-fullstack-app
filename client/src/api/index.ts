@@ -21,6 +21,10 @@ interface APIData {
     getAllPosts: (
       pagination: PaginationData
     ) => Promise<{ total: number; posts: Post[] }>;
+    getTagPosts: (
+      pagination: PaginationData,
+      search: string
+    ) => Promise<{ total: number; posts: Post[] }>;
     getUserPosts: (
       pagination: PaginationData
     ) => Promise<{ total: number; posts: Post[] }>;
@@ -112,6 +116,24 @@ const API: APIData = {
         return await response.json();
       } else {
         throw new Error('Error while fetching posts');
+      }
+    },
+    getTagPosts: async (pagination, search) => {
+      const query = queryString.stringify(removeEmptyKeys(pagination));
+      const response = await fetch(`/api/v1/posts/by-tag?${query}`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tags: search && search.length > 0 ? search.split(' ') : [],
+        }),
+      });
+      if (response.ok) {
+        return await response.json();
+      } else {
+        throw new Error('Error while fetching posts by tag');
       }
     },
     getUserPosts: async (pagination) => {

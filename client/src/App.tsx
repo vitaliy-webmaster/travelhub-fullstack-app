@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import io from 'socket.io-client';
 import { Layout } from 'antd';
 
 import Header from './components/Header';
@@ -16,11 +17,36 @@ import { refetchAuthStart } from './redux/thunks';
 import User from './pages/User';
 import Post from './pages/Post';
 import NewPost from './pages/NewPost';
+import {
+  Action,
+  setSocketConnect,
+  wsCreatePost,
+  wsDeletePost,
+  wsUpdatePost,
+} from './redux/actions';
+import { Post as PostType } from './types';
 
 const App = () => {
   const authUser = useSelector(authUserSelector);
   const isRefetchAuthDone = useSelector(isRefetchAuthDoneSelector);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const socket = io.connect('/');
+    dispatch(setSocketConnect(socket));
+    socket.on('create_post', (post: PostType) => {
+      dispatch(wsCreatePost(post));
+    });
+    socket.on('update_post', (post: PostType) => {
+      dispatch(wsUpdatePost(post));
+    });
+    socket.on('delete_post', (id: string) => {
+      dispatch(wsDeletePost(id));
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(refetchAuthStart());

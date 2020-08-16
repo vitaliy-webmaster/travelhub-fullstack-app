@@ -1,6 +1,11 @@
 import { Post, User } from '../types';
 import { PaginationData } from './thunks';
 
+export const SET_SOCKET_CONNECT = 'SET_SOCKET_CONNECT';
+export const WS_CREATE_POST = 'WS_CREATE_POST';
+export const WS_UPDATE_POST = 'WS_UPDATE_POST';
+export const WS_DELETE_POST = 'WS_DELETE_POST';
+
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
@@ -28,6 +33,26 @@ export const UPDATE_POST_FAILED = 'UPDATE_POST_FAILED';
 export const CLEAR_PREVIOUS_POST = 'CLEAR_PREVIOUS_POST';
 export const CREATE_POST_SUCCESS = 'CREATE_POST_SUCCESS';
 export const CREATE_POST_FAILED = 'CREATE_POST_FAILED';
+
+interface SetSocketConnect {
+  type: typeof SET_SOCKET_CONNECT;
+  payload: any;
+}
+
+interface WsCreatePost {
+  type: typeof WS_CREATE_POST;
+  payload: Post;
+}
+
+interface WsUpdatePost {
+  type: typeof WS_UPDATE_POST;
+  payload: Post;
+}
+
+interface WsDeletePost {
+  type: typeof WS_DELETE_POST;
+  payload: string;
+}
 
 interface LogInSuccess {
   type: typeof LOGIN_SUCCESS;
@@ -164,6 +189,10 @@ interface CreatePostFailed {
 }
 
 export type Action =
+  | SetSocketConnect
+  | WsCreatePost
+  | WsUpdatePost
+  | WsDeletePost
   | LogInSuccess
   | LogInFailed
   | LogOutSuccess
@@ -191,6 +220,34 @@ export type Action =
   | ClearPreviousPost
   | CreatePostSuccess
   | CreatePostFailed;
+
+export const setSocketConnect = (payload: any): SetSocketConnect => {
+  return {
+    type: SET_SOCKET_CONNECT,
+    payload,
+  };
+};
+
+export const wsCreatePost = (payload: Post): WsCreatePost => {
+  return {
+    type: WS_CREATE_POST,
+    payload,
+  };
+};
+
+export const wsUpdatePost = (payload: Post): WsUpdatePost => {
+  return {
+    type: WS_UPDATE_POST,
+    payload,
+  };
+};
+
+export const wsDeletePost = (payload: string): WsDeletePost => {
+  return {
+    type: WS_DELETE_POST,
+    payload,
+  };
+};
 
 export const logInSuccess = (payload: User): LogInSuccess => {
   return {

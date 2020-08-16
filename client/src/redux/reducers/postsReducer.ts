@@ -17,6 +17,9 @@ import {
   UNLIKE_POST_SUCCESS,
   UPDATE_POST_FAILED,
   UPDATE_POST_SUCCESS,
+  WS_CREATE_POST,
+  WS_DELETE_POST,
+  WS_UPDATE_POST,
 } from '../actions';
 import { Post } from '../../types';
 import { PaginationData } from '../thunks';
@@ -26,9 +29,6 @@ export interface PostsState {
   posts: Post[] | null;
   postsTotal: number | null;
   postsPagination: PaginationData | null;
-  // userPosts: Post[] | null;
-  // userPostsTotal: number | null;
-  // userPostsPagination: PaginationData | null;
   postsError: Error | null;
 }
 
@@ -37,14 +37,44 @@ const initialState: PostsState = {
   posts: null,
   postsTotal: null,
   postsPagination: null,
-  // userPosts: null,
-  // userPostsTotal: null,
-  // userPostsPagination: null,
   postsError: null,
 };
 
 const postsReducer = (state: PostsState = initialState, action: Action) => {
   switch (action.type) {
+    case WS_CREATE_POST: {
+      const { posts, postsPagination, postsTotal } = state;
+      return {
+        ...state,
+        posts:
+          posts && postsPagination?.skip === 0
+            ? [action.payload, ...posts]
+            : posts,
+        postsTotal: postsTotal ? postsTotal + 1 : postsTotal,
+      };
+    }
+    case WS_UPDATE_POST: {
+      const { posts } = state;
+      if (!posts) return state;
+      const idx = posts.findIndex((post) => post._id === action.payload._id);
+      return {
+        ...state,
+        posts:
+          idx > -1
+            ? [...posts.slice(0, idx), action.payload, ...posts.slice(idx + 1)]
+            : posts,
+      };
+    }
+    case WS_DELETE_POST: {
+      const { posts } = state;
+      if (!posts) return state;
+      const idx = posts.findIndex((post) => post._id === action.payload);
+      return {
+        ...state,
+        posts:
+          idx > -1 ? [...posts.slice(0, idx), ...posts.slice(idx + 1)] : posts,
+      };
+    }
     case GET_ALL_POSTS_SUCCESS: {
       const { posts, total, pagination } = action.payload;
       return {

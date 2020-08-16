@@ -2,3 +2,26 @@
     flex: 1;
     display: flex;
 }
+
+.feed-tag-search {
+    margin-top: 25px;
+}
+
+.feed-tag-container {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.feed-list-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.hashtag-search-note {
+    text-align: center;
+    margin-top: 10px;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 13px;
+    font-weight: 500;
+}

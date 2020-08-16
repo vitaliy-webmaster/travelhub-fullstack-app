@@ -11,8 +11,10 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const path = require('path');
+const http = require('http');
+const socketIO = require('socket.io');
 
-const checkServerStatus = require('./helpers/checkServerStatus');
+// const checkServerStatus = require('./helpers/checkServerStatus');
 const config = require('./config');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -43,6 +45,24 @@ const connectMongoDB = async () => {
 connectMongoDB().catch();
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server);
+
+io.on('connection', (socket) => {
+  console.log('socket connected', socket.id);
+  socket.on('create_post', (post) => {
+    console.log('create_post RECEIVED');
+    socket.broadcast.emit('create_post', post);
+  });
+  socket.on('update_post', (post) => {
+    console.log('update_post RECEIVED');
+    socket.broadcast.emit('update_post', post);
+  });
+  socket.on('delete_post', (id) => {
+    console.log('delete_post RECEIVED');
+    socket.broadcast.emit('delete_post', id);
+  });
+});
 
 if (!dev) {
   app.use(helmet());
@@ -105,10 +125,10 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen(port, (error) => {
+server.listen(port, (error) => {
   if (error) throw error;
   console.log(`Server successfully started on ${rootUrl}`);
 
   /* helper function to avoid node sleeping using free tariff plan on Heroku */
-  checkServerStatus(rootUrl, 25);
+  // checkServerStatus(rootUrl, 25);
 });

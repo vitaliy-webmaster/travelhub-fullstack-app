@@ -71,8 +71,11 @@ const addPost = async (req, res, next) => {
   if (!text || !title)
     return next(createError('Mandatory fields: Title, Text', 401));
   try {
-    const post = new Post({ title, text, image, author: req.user._id, tags });
+    const post = new Post(
+      removeEmptyKeys({ title, text, image, author: req.user._id, tags })
+    );
     await post.save();
+    await Post.populate(post, { path: 'likedBy author' });
     return res.status(200).json(post);
   } catch (error) {
     return next(error);

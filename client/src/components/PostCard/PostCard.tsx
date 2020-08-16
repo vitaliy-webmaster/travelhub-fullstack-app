@@ -89,15 +89,16 @@ const PostCard = ({
 
   return (
     <Card
-      title={title}
+      // title={title}
       className="post-card"
       cover={<img alt="" src={image} />}
       actions={actions}
     >
+      <div className="post-card__title">{title}</div>
       <Meta
         avatar={<Avatar src={avatar} />}
         title={`Author: ${username}`}
-        description={`Created: ${moment(createdAt).format('DD-MM-YYYY')}`}
+        description={`Created: ${moment(createdAt).format('YYYY-MM-DD HH:mm')}`}
       />
       <div className="post-card__text">{text}</div>
       <div className="post-card__tags">Tags: {tags.join(' ')}</div>

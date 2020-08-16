@@ -6,6 +6,7 @@ import {
   LOGOUT_SUCCESS,
   REFETCH_AUTH_FAILED,
   REFETCH_AUTH_SUCCESS,
+  SET_SOCKET_CONNECT,
   SIGNUP_FAILED,
   SIGNUP_SUCCESS,
   UPDATE_USER_FAILED,
@@ -14,6 +15,7 @@ import {
 import { User } from '../../types';
 
 export interface UsersState {
+  socket: any;
   isRefetchAuthDone: boolean;
   authUser: User | null;
   authError: Error | null;
@@ -21,6 +23,7 @@ export interface UsersState {
 }
 
 const initialState: UsersState = {
+  socket: null,
   isRefetchAuthDone: false,
   authUser: null,
   authError: null,
@@ -29,6 +32,12 @@ const initialState: UsersState = {
 
 const usersReducer = (state: UsersState = initialState, action: Action) => {
   switch (action.type) {
+    case SET_SOCKET_CONNECT: {
+      return {
+        ...state,
+        socket: action.payload,
+      };
+    }
     case LOGIN_SUCCESS: {
       return {
         ...state,

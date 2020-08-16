@@ -56,6 +56,20 @@ export const getAllPostsStart: AppThunk = (pagination: PaginationData) => {
   };
 };
 
+export const getTagPostsStart: AppThunk = (
+  pagination: PaginationData,
+  search: string
+) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const { total, posts } = await API.posts.getTagPosts(pagination, search);
+      return dispatch(getAllPostsSuccess(total, posts, pagination));
+    } catch (error) {
+      return dispatch(getAllPostsFailed(error));
+    }
+  };
+};
+
 export const getUserPostsStart: AppThunk = (pagination: PaginationData) => {
   return async (dispatch: Dispatch) => {
     try {
@@ -68,10 +82,14 @@ export const getUserPostsStart: AppThunk = (pagination: PaginationData) => {
 };
 
 export const likePostStart: AppThunk = (id: string) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch, getState) => {
     try {
+      const {
+        users: { socket },
+      } = getState();
       const post = await API.posts.likePost(id);
-      return dispatch(likePostSuccess(post));
+      dispatch(likePostSuccess(post));
+      socket.emit('update_post', post);
     } catch (error) {
       return dispatch(likePostFailed(error));
     }
@@ -79,10 +97,14 @@ export const likePostStart: AppThunk = (id: string) => {
 };
 
 export const unlikePostStart: AppThunk = (id: string) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch, getState) => {
     try {
+      const {
+        users: { socket },
+      } = getState();
       const post = await API.posts.unlikePost(id);
-      return dispatch(unlikePostSuccess(post));
+      dispatch(unlikePostSuccess(post));
+      socket.emit('update_post', post);
     } catch (error) {
       return dispatch(unlikePostFailed(error));
     }
@@ -90,10 +112,14 @@ export const unlikePostStart: AppThunk = (id: string) => {
 };
 
 export const deletePostStart: AppThunk = (id: string) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch, getState) => {
     try {
+      const {
+        users: { socket },
+      } = getState();
       await API.posts.deletePost(id);
-      return dispatch(deletePostSuccess(id));
+      dispatch(deletePostSuccess(id));
+      socket.emit('delete_post', id);
     } catch (error) {
       return dispatch(deletePostFailed(error));
     }
@@ -119,10 +145,11 @@ export const updatePostStart: AppThunk<Promise<void>> = (
     return new Promise(async (resolve, reject) => {
       try {
         const {
-          users: { authUser },
+          users: { authUser, socket },
         } = getState();
         const post = await API.posts.updatePost(values);
         dispatch(updatePostSuccess(post));
+        socket.emit('update_post', post);
         openNotification(
           NotificationType.SUCCESS,
           `${authUser?.username}, congratulations!`,
@@ -149,10 +176,11 @@ export const createPostStart: AppThunk<Promise<void>> = (
     return new Promise(async (resolve, reject) => {
       try {
         const {
-          users: { authUser },
+          users: { authUser, socket },
         } = getState();
         const post = await API.posts.createPost(values);
         dispatch(createPostSuccess(post));
+        socket.emit('create_post', post);
         openNotification(
           NotificationType.SUCCESS,
           `${authUser?.username}, congratulations!`,
