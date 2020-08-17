@@ -9,9 +9,10 @@ const User = mongoose.model('User');
 const signUp = async (req, res, next) => {
   const { username, email, password, birthday, gender, bio, avatar } = req.body;
   const oldUserByUsername = await User.findOne({ username: username.trim() });
-  if (oldUserByUsername) return next(createError('Username already exists'));
+  if (oldUserByUsername)
+    return next(createError('Username already exists', 400));
   const oldUserByEmail = await User.findOne({ email: email.trim() });
-  if (oldUserByEmail) return next(createError('Email already exists'));
+  if (oldUserByEmail) return next(createError('Email already exists', 400));
   const newUser = new User(
     removeEmptyKeys({ username, email, birthday, gender, bio, avatar })
   );
@@ -28,6 +29,18 @@ const signUp = async (req, res, next) => {
       });
     })(req, res, next);
   });
+};
+
+const validateUsername = async (req, res, next) => {
+  const { username } = req.params;
+  if (username) {
+    const oldUserByUsername = await User.findOne({ username: username.trim() });
+    if (oldUserByUsername)
+      return next(createError('Username already exists', 400));
+    return res.status(200).json(username.trim());
+  } else {
+    return res.status(200).json('');
+  }
 };
 
 const logIn = (req, res, next) => {
@@ -54,4 +67,4 @@ const isAuthenticated = (req, res, next) => {
   return next();
 };
 
-module.exports = { signUp, logIn, logOut, isAuthenticated };
+module.exports = { signUp, validateUsername, logIn, logOut, isAuthenticated };

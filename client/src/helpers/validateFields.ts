@@ -4,9 +4,12 @@ const usernameRegex = /^[0-9a-zA-Z]{3,}$/;
 const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{6,20}$/;
 
-export const validateUsername = (value: any) => {
+export const validateUsername = async (value: any) => {
   if (!value) return 'Username is required';
   if (!usernameRegex.test(value)) return 'Invalid username';
+  const response = await fetch(`/api/v1/auth/username-check/${value}`);
+  if (response.ok) return;
+  return 'Username already exists';
 };
 
 export const validateEmail = (value: any) => {
