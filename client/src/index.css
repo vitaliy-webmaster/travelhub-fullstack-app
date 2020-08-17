@@ -25,6 +25,7 @@ a:focus {
 }
 
 .app-layout {
+
 }
 
 .app-content {
@@ -33,7 +34,12 @@ a:focus {
     flex: 1 0 auto;
     display: flex;
     align-items: stretch;
-    background: #f9f9f9;
+    background: #f9f9f9 center center no-repeat;
+    background-size: cover;
+}
+
+.app-content--bg {
+    background-image: url('/server/images/starter-bg.jpg');
 }
 
 .ant-form-item {

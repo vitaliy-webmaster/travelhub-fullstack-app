@@ -23,7 +23,7 @@ const postSchema = new mongoose.Schema(
     likedBy: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
     tags: { type: [String], index: true },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 class PostClass {

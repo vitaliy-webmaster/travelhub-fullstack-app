@@ -27,7 +27,7 @@ export default ({
       name="username"
       type="text"
       label="Username*"
-      validate={validateUsername}
+      validate={validateUsername('profile')}
       submitCount={submitCount}
       disabled
     />
@@ -47,17 +47,15 @@ export default ({
       format="DD-MM-YYYY"
       validate={validateDate}
       submitCount={submitCount}
-      // hasFeedback
     />
     <Field
       component={AntSelect}
       name="gender"
-      label="Gender"
+      label="Gender*"
       defaultValue={values.gender}
       selectOptions={['male', 'female']}
       submitCount={submitCount}
       tokenSeparators={[',']}
-      // hasFeedback
     />
     <Field
       component={AntTextArea}
@@ -67,7 +65,6 @@ export default ({
       rows={4}
       validate={validateBio}
       submitCount={submitCount}
-      // hasFeedback
     />
     <div className="user-profile-submit-container">
       <button className="ant-btn ant-btn-primary" type="submit">

@@ -7,7 +7,11 @@ import './style.css';
 import InnerForm from './InnerForm';
 import { User } from '../../types';
 import { updateUserStart } from '../../redux/thunks';
-import UploadAvatarImage from '../UploadAvatarImage';
+import UploadImage from '../UploadImage';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppState } from '../../redux/reducers';
+import { Action } from 'redux';
+import { useHistory } from 'react-router';
 
 export interface UserProfileFormValues {
   username: string;
@@ -22,9 +26,10 @@ interface Props {
 }
 
 const UserProfileForm = ({ authUser }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const { username, email, birthday, gender, bio } = authUser;
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const history = useHistory();
 
   useEffect(() => {
     if (authUser?.avatar) setImageUrl(authUser.avatar);
@@ -40,7 +45,9 @@ const UserProfileForm = ({ authUser }: Props) => {
         bio,
         avatar: imageUrl,
       })
-    );
+    )
+      .then(() => history.push('/feed'))
+      .catch();
   };
 
   const initialValues: UserProfileFormValues = {
@@ -53,7 +60,11 @@ const UserProfileForm = ({ authUser }: Props) => {
 
   return (
     <div className="user-profile-wrapper">
-      <UploadAvatarImage imageUrl={imageUrl} setImageUrl={setImageUrl} />
+      <UploadImage
+        type="avatar"
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+      />
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {InnerForm}
       </Formik>

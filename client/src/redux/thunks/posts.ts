@@ -45,28 +45,41 @@ export interface CreatePostStartData {
   tags: string[];
 }
 
-export const getAllPostsStart: AppThunk = (pagination: PaginationData) => {
-  return async (dispatch: Dispatch) => {
-    try {
-      const { total, posts } = await API.posts.getAllPosts(pagination);
-      return dispatch(getAllPostsSuccess(total, posts, pagination));
-    } catch (error) {
-      return dispatch(getAllPostsFailed(error));
-    }
+export const getAllPostsStart: AppThunk<Promise<void>> = (
+  pagination: PaginationData
+) => {
+  return (dispatch: Dispatch) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { total, posts } = await API.posts.getAllPosts(pagination);
+        dispatch(getAllPostsSuccess(total, posts, pagination));
+        return resolve();
+      } catch (error) {
+        dispatch(getAllPostsFailed(error));
+        return reject();
+      }
+    });
   };
 };
 
-export const getTagPostsStart: AppThunk = (
+export const getTagPostsStart: AppThunk<Promise<void>> = (
   pagination: PaginationData,
   search: string
 ) => {
   return async (dispatch: Dispatch) => {
-    try {
-      const { total, posts } = await API.posts.getTagPosts(pagination, search);
-      return dispatch(getAllPostsSuccess(total, posts, pagination));
-    } catch (error) {
-      return dispatch(getAllPostsFailed(error));
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { total, posts } = await API.posts.getTagPosts(
+          pagination,
+          search
+        );
+        dispatch(getAllPostsSuccess(total, posts, pagination));
+        return resolve();
+      } catch (error) {
+        dispatch(getAllPostsFailed(error));
+        return reject();
+      }
+    });
   };
 };
 

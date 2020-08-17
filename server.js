@@ -49,17 +49,13 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on('connection', (socket) => {
-  console.log('socket connected', socket.id);
   socket.on('create_post', (post) => {
-    console.log('create_post RECEIVED');
     socket.broadcast.emit('create_post', post);
   });
   socket.on('update_post', (post) => {
-    console.log('update_post RECEIVED');
     socket.broadcast.emit('update_post', post);
   });
   socket.on('delete_post', (id) => {
-    console.log('delete_post RECEIVED');
     socket.broadcast.emit('delete_post', id);
   });
 });

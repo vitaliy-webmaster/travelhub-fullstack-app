@@ -29,7 +29,7 @@ export default ({
       name="username"
       type="text"
       label="Username*"
-      validate={validateUsername}
+      validate={validateUsername('signup')}
       submitCount={submitCount}
       // hasFeedback
     />
@@ -64,7 +64,7 @@ export default ({
     <Field
       component={AntSelect}
       name="gender"
-      label="Gender"
+      label="Gender*"
       selectOptions={['male', 'female']}
       submitCount={submitCount}
       tokenSeparators={[',']}

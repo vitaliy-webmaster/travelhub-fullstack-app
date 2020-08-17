@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { signUpStart } from '../../redux/thunks';
 import { Formik } from 'formik';
 import InnerForm from './InnerForm';
-import UploadAvatarImage from '../UploadAvatarImage';
+import UploadImage from '../UploadImage';
 
 export interface SignUpFormValues {
   username: string;
@@ -34,7 +34,11 @@ const SignUpForm = () => {
 
   return (
     <div className="signup-form-wrapper">
-      <UploadAvatarImage imageUrl={imageUrl} setImageUrl={setImageUrl} />
+      <UploadImage
+        type="avatar"
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+      />
       <Formik
         initialValues={initialValues as SignUpFormValues}
         onSubmit={handleSubmit}

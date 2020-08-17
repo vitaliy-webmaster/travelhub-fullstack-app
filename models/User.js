@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const usernameRegex = /^[0-9a-zA-Z]{3,}$/;
-const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
 
 const userSchema = new mongoose.Schema(
   {
@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
       // default: '/server/img/avatar.jpg',
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });

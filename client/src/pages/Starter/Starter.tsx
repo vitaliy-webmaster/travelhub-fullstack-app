@@ -25,7 +25,7 @@ const Starter = ({ authUser }: Props) => {
       <div className="page-starter__greeting greeting">
         <h1 className="greeting__header">Built for travellers</h1>
         <p className="greeting__text">
-          This BLOG is a travel platform inspired by the way you live and
+          TravelHUB is a travel platform inspired by the way you live and
           create. From Kiev to New York, you can share your lifestyle, open up
           new adventures, and build your audience everywhere you want.
         </p>

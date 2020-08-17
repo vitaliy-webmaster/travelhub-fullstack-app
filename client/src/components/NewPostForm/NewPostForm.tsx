@@ -9,7 +9,7 @@ import './style.css';
 import InnerForm from './InnerForm';
 import { createPostStart } from '../../redux/thunks';
 import { AppState } from '../../redux/reducers';
-import UploadPostImage from '../UploadPostImage';
+import UploadImage from '../UploadImage';
 
 export interface NewPostFormValues {
   title: string;
@@ -44,7 +44,7 @@ const PostForm = () => {
 
   return (
     <div className="new-post-form-wrapper">
-      <UploadPostImage imageUrl={imageUrl} setImageUrl={setImageUrl} />
+      <UploadImage type="post" imageUrl={imageUrl} setImageUrl={setImageUrl} />
       <Formik
         initialValues={initialValues as NewPostFormValues}
         onSubmit={handleSubmit}

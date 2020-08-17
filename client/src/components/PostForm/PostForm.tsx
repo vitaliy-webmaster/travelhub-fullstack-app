@@ -10,7 +10,7 @@ import { Post } from '../../types';
 import InnerForm from './InnerForm';
 import { updatePostStart } from '../../redux/thunks';
 import { AppState } from '../../redux/reducers';
-import UploadPostImage from '../UploadPostImage';
+import UploadImage from '../UploadImage';
 
 export interface PostFormValues {
   title: string;
@@ -56,7 +56,7 @@ const PostForm = ({ currentPost }: Props) => {
 
   return (
     <div className="update-post-form-wrapper">
-      <UploadPostImage imageUrl={imageUrl} setImageUrl={setImageUrl} />
+      <UploadImage type="post" imageUrl={imageUrl} setImageUrl={setImageUrl} />
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {InnerForm}
       </Formik>

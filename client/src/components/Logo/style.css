@@ -1,6 +1,7 @@
 .logo {
     width: 120px;
-    height: 36px;
-    background: #ccc;
-    margin: 6px 24px 6px 0;
+    height: 44px;
+    background: url('/server/images/site-logo.png') center center no-repeat;
+    background-size: 265px auto;
+    margin: 0 24px 3px 0;
 }

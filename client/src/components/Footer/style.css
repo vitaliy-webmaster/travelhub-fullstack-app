@@ -1,4 +1,9 @@
 .app-footer {
     padding: 16px 50px;
-    text-align: center
+    text-align: center;
+    background: #001529;
+}
+
+.app-footer__text {
+    color: rgba(255, 255, 255, 0.65);
 }

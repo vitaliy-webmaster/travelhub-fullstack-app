@@ -4,7 +4,7 @@
 }
 
 .page-starter__greeting {
-    flex: 2;
+    flex: 1.5;
     display: flex;
     flex-direction: column;
     justify-content: center;

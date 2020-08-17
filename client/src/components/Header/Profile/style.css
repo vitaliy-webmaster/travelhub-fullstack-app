@@ -22,18 +22,19 @@
 }
 
 .header-profile__greeting div:first-child {
+    font-size: 14px;
     max-width: 125px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
 }
 
 .header-profile__greeting div:last-child {
     display: flex;
     justify-content: flex-start;
-    font-size: 11px;
-    line-height: 16px;
+    font-size: 12px;
+    line-height: 14px;
 }
 
 .header-profile__greeting div:last-child a {

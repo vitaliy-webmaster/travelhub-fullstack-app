@@ -25,7 +25,10 @@ const signUp = async (req, res, next) => {
       }
       req.logIn(user, (error) => {
         if (error) return next(error);
-        return res.status(201).json(user);
+        const userObj = user.toObject();
+        delete userObj.hash;
+        delete userObj.salt;
+        return res.status(201).json(userObj);
       });
     })(req, res, next);
   });
@@ -51,7 +54,10 @@ const logIn = (req, res, next) => {
     }
     req.logIn(user, (error) => {
       if (error) return next(error);
-      return res.status(200).json(user);
+      const userObj = user.toObject();
+      delete userObj.hash;
+      delete userObj.salt;
+      return res.status(200).json(userObj);
     });
   })(req, res, next);
 };

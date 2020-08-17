@@ -24,7 +24,9 @@ const Profile = ({ authUser }: Props) => {
 
   return (
     <div className="app-header__profile header-profile">
-      <Avatar size={36} shape="square" icon={<UserOutlined />} src={avatar} />
+      <Link to={`/me`}>
+        <Avatar size={42} shape="square" icon={<UserOutlined />} src={avatar} />
+      </Link>
       <div className="header-profile__greeting">
         <div>
           Hello, <span className="header-profile__username">{username}</span>

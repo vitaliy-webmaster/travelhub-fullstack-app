@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Layout, Menu } from 'antd';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import './style.css';
 import Logo from '../Logo';
@@ -12,6 +12,7 @@ import { authUserSelector } from '../../redux/selectors';
 const Header = () => {
   const authUser = useSelector(authUserSelector);
   const history = useHistory();
+  const location = useLocation();
 
   const navigate = useCallback(
     (url: string) => () => {
@@ -23,12 +24,22 @@ const Header = () => {
   return (
     <Layout.Header className="app-header">
       <Logo />
-      <Menu className="app-header__menu" theme="dark" mode="horizontal">
-        <Menu.Item key="1" onClick={navigate('/')}>
-          Home
+      <Menu
+        className="app-header__menu header-menu"
+        theme="dark"
+        mode="horizontal"
+        selectedKeys={[location.pathname]}
+      >
+        <Menu.Item key="/">
+          <Link to="/" className="header-menu__link">
+            Home
+          </Link>
         </Menu.Item>
-        <Menu.Item key="2" onClick={navigate('/feed')}>
-          Feed
+
+        <Menu.Item key="/feed">
+          <Link to="/feed" className="header-menu__link">
+            Feed
+          </Link>
         </Menu.Item>
       </Menu>
       {authUser ? (

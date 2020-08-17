@@ -125,23 +125,29 @@ export const refetchAuthStart: AppThunk = () => {
   };
 };
 
-export const updateUserStart: AppThunk = (values: UpdateUserStartData) => {
+export const updateUserStart: AppThunk<Promise<void>> = (
+  values: UpdateUserStartData
+) => {
   return async (dispatch: Dispatch) => {
-    try {
-      const user = await API.users.updateUser(values);
-      dispatch(updateUserSuccess(user));
-      return openNotification(
-        NotificationType.SUCCESS,
-        `${user.username}, your profile is updated`,
-        'Tell us more about yourself'
-      );
-    } catch (error) {
-      dispatch(updateUserFailed(error));
-      return openNotification(
-        NotificationType.ERROR,
-        'Update Failure',
-        'Please check data and try again later'
-      );
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const user = await API.users.updateUser(values);
+        dispatch(updateUserSuccess(user));
+        openNotification(
+          NotificationType.SUCCESS,
+          `${user.username}, your profile is updated`,
+          'Tell us more about yourself'
+        );
+        return resolve();
+      } catch (error) {
+        dispatch(updateUserFailed(error));
+        openNotification(
+          NotificationType.ERROR,
+          'Update Failure',
+          'Please check data and try again later'
+        );
+        return reject();
+      }
+    });
   };
 };

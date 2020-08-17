@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import { Layout } from 'antd';
@@ -18,7 +18,6 @@ import User from './pages/User';
 import Post from './pages/Post';
 import NewPost from './pages/NewPost';
 import {
-  Action,
   setSocketConnect,
   wsCreatePost,
   wsDeletePost,
@@ -30,6 +29,7 @@ const App = () => {
   const authUser = useSelector(authUserSelector);
   const isRefetchAuthDone = useSelector(isRefetchAuthDoneSelector);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
     const socket = io.connect('/');
@@ -46,7 +46,7 @@ const App = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(refetchAuthStart());
@@ -110,16 +110,21 @@ const App = () => {
     </>
   );
 
+  const bgClass =
+    location.pathname === '/' ||
+    location.pathname === '/login' ||
+    location.pathname === '/signup'
+      ? 'app-content--bg'
+      : '';
+
   return (
-    <Router>
-      <Layout className="app-layout">
-        <Header />
-        <Layout.Content className="app-content">
-          {isRefetchAuthDone ? appContent : <LoadSpinner />}
-        </Layout.Content>
-        <Footer />
-      </Layout>
-    </Router>
+    <Layout className="app-layout">
+      <Header />
+      <Layout.Content className={`app-content ${bgClass}`}>
+        {isRefetchAuthDone ? appContent : <LoadSpinner />}
+      </Layout.Content>
+      <Footer />
+    </Layout>
   );
 };
 
